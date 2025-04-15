@@ -1,0 +1,20 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyPurchaseRISavingPlan",
+      "Effect": "Deny",
+      "Action": [
+        "dynamodb:PurchaseReservedCapacityOfferings",
+        "ec2:PurchaseReservedInstancesOffering",
+        "ec2:PurchaseHostReservation",
+        "elasticache:PurchaseReservedCacheNodesOffering",
+        "es:PurchaseReservedElasticsearchInstanceOffering",
+        "rds:PurchaseReservedDBInstancesOffering",
+        "redshift:PurchaseReservedNodeOffering",
+        "savingsplans:CreateSavingsPlan"
+      ],
+      "Resource": ["*"]
+    }
+  ]
+}

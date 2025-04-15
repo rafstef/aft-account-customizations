@@ -1,0 +1,89 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyCreateDeleteTGW",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:DeleteTransitGatewayRouteTable",
+        "ec2:CreateTransitGatewayRouteTable",
+        "ec2:CreateTransitGateway",
+        "ec2:DeleteTransitGateway"
+      ],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": ["arn:aws:iam::*:role/NetworkAdmin"]
+        }
+      }
+    },
+    {
+      "Sid": "DenyTGWVpcAttach",
+      "Effect": "Deny",
+      "Action": ["ec2:AcceptTransitGatewayVpcAttachment"],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/NetworkAdmin",
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::*:role/PROVISIONING-Network",
+            "arn:aws:iam::222222222222:role/tgw_accept_attach_request"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyTGWAddRouteAndPropagation",
+      "Effect": "Deny",
+      "Action": [
+        "ec2:AssociateTransitGatewayRouteTable",
+        "ec2:CreateTransitGatewayRoute",
+        "ec2:EnableTransitGatewayRouteTablePropagation"
+      ],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/NetworkAdmin",
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::*:role/PROVISIONING-Network",
+            "arn:aws:iam::222222222222:role/tgw_add_routes_and_propagation"
+          ]
+        }
+      }
+    },
+    {
+      "Effect": "Deny",
+      "Action": [
+        "ec2:AcceptTransitGatewayPeeringAttachment",
+        "ec2:AssociateTransitGatewayMulticastDomain",
+        "ec2:CreateTransitGatewayMulticastDomain",
+        "ec2:CreateTransitGatewayPeeringAttachment",
+        "ec2:CreateTransitGatewayVpcAttachment",
+        "ec2:DeleteTransitGatewayMulticastDomain",
+        "ec2:DeleteTransitGatewayPeeringAttachment",
+        "ec2:DeleteTransitGatewayRoute",
+        "ec2:DeleteTransitGatewayVpcAttachment",
+        "ec2:DeregisterTransitGateway*",
+        "ec2:DisableTransitGateway*",
+        "ec2:DisassociateTransitGateway*",
+        "ec2:ModifyTransitGateway*",
+        "ec2:RegisterTransitGateway*",
+        "ec2:RejectTransitGateway*",
+        "ec2:ReplaceTransitGateway*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::*:role/PROVISIONING-Network",
+            "arn:aws:iam::*:role/NetworkAdmin",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyDeleteADFSRoleIA",
+      "Effect": "Deny",
+      "Action": "iam:DeleteRole",
+      "Resource": ["arn:aws:iam::*:role/ADFS-*"],
+      "Condition": {
+        "StringEquals": {
+          "aws:PrincipalAccount": "IA-account-ID"
+        }
+      }
+    },
+    {
+      "Sid": "DenyIAMActionsOnProvisionedRole",
+      "Effect": "Deny",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRolePermissionsBoundary",
+        "iam:PutRolePermissionsBoundary",
+        "iam:PutRolePolicy",
+        "iam:TagRole",
+        "iam:UntagRole",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:UpdateRole",
+        "iam:UpdateRoleDescription"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/PROVISIONING-*",
+        "arn:aws:iam::*:role/Admin",
+        "arn:aws:iam::*:role/NetworkAdmin",
+        "arn:aws:iam::*:role/PowerUser",
+        "arn:aws:iam::*:role/Procurement",
+        "arn:aws:iam::*:role/ReadOnly",
+        "arn:aws:iam::*:role/SecurityReadOnly",
+        "arn:aws:iam::*:role/SecurityAdmin",
+        "arn:aws:iam::*:role/SuperAdmin",
+        "arn:aws:iam::*:role/AWSReservedSSO_Admin*"
+      ],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::107768939614:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    },
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "DenyIAMRoleActions",
+          "Effect": "Deny",
+          "Action": [
+            "iam:Add*",
+            "iam:Attach*",
+            "iam:Create*",
+            "iam:Delete*",
+            "iam:Detach*",
+            "iam:Pass*",
+            "iam:Put*",
+            "iam:Remove*",
+            "iam:Set*",
+            "iam:Tag*",
+            "iam:Untag*",
+            "iam:Update*",
+            "iam:Upload*"
+          ],
+          "Resource": ["*"],
+          "Condition": {
+            "StringNotLike": {
+              "aws:PrincipalArn": [
+                "arn:aws:iam::*:role/Admin",
+				        "arn:aws:iam::*:role/NetworkAdmin",
+                "arn:aws:iam::*:role/PROVISIONING-Admin",
+                "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin",
+                "arn:aws:iam::*:role/AWSReservedSSO_Admin*",
+				        "some:user:to:dismiss"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

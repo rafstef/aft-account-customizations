@@ -1,0 +1,44 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Deny",
+        "Action": [
+          "ec2:DeleteFlowLogs",
+          "logs:DeleteLogGroup",
+          "logs:DeleteLogStream"
+        ],
+        "Resource": "*"
+      },
+      {
+        "Action": [
+            "ec2:CreateDefaultSubnet",
+            "ec2:CreateDefaultVpc"
+        ],
+        "Resource": "*",
+        "Effect": "Deny"
+    },
+    {
+      "Effect": "Deny",
+      "Action": "ec2:CreateVolume",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "ec2:Encrypted": "false"
+        }
+
+    }
+  },
+  {
+    "Sid": "PreventEc2MountUnencryptedVolume",
+    "Effect": "Deny", 
+    "Action": "ec2:RunInstances",
+    "Resource": "arn:aws:ec2:*:*:volume/*",
+    "Condition": {
+      "Bool": {
+        "ec2:Encrypted": "false"
+      }
+    }
+  }
+    ]
+   }

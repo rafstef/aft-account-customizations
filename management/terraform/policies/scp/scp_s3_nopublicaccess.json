@@ -1,0 +1,17 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:PutBucketPublicAccessBlock"
+            ],
+            "Resource": "*",
+            "Effect": "Deny",
+            "Condition": {
+                "StringNotLike": {
+                    "s3:BucketName": "lz-*"
+                }
+            }
+        }
+    ]
+}

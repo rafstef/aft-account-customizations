@@ -1,0 +1,24 @@
+{
+    "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "DenyRAM",
+                "Effect": "Deny",
+                "Action": [
+                                "ram:*"
+                ],
+                "Resource": [
+                                "*"
+                ],
+                "Condition": {
+                    "StringNotLike": {
+                        "aws:PrincipalArn": [
+                            "arn:aws:iam::*:role/Admin",
+                            "arn:aws:iam::*:role/PROVISIONING-Admin",
+                            "arn:aws:iam::*:role/PROVISIONING-Network"
+                        ]
+                    }
+                }
+            }
+        ]
+    }

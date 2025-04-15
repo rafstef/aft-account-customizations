@@ -1,0 +1,45 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DeniesAccessToAWSUnlessByRegion",
+      "Effect": "Deny",
+      "NotAction": [
+        "aws-marketplace:*",
+        "budgets:*",
+        "ce:*",
+        "cloudfront:*",
+        "fms:*",
+        "globalaccelerator:*",
+        "health:*",
+        "iam:*",
+        "importexport:*",
+        "organizations:*",
+        "route53:*",
+        "route53domains:*",
+        "s3:*",
+        "sts:*",
+        "support:*",
+        "support:*",
+        "waf:*"
+      ],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:RequestedRegion": ["eu-west-1", "eu-south-1"]
+        }
+      }
+    },
+    {
+      "Sid": "DenyCreationOfBucketOutsideAllowListRegions",
+      "Effect": "Deny",
+      "Action": ["s3:CreateBucket"],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotEquals": {
+          "aws:RequestedRegion": ["eu-west-1", "eu-south-1"]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyIAMCoreChange",
+      "Effect": "Deny",
+      "Action": [
+        "iam:AddClientIDToOpenIDConnectProvider",
+        "iam:CreateAccountAlias",
+        "iam:CreateSAMLProvider",
+        "iam:DeleteAccountAlias",
+        "iam:DeleteAccountPasswordPolicy",
+        "iam:DeleteSAMLProvider",
+        "iam:UpdateSAMLProvider",
+        "iam:UpdateAccountPasswordPolicy"
+      ],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyCreateOpenIDConnectProvider",
+      "Effect": "Deny",
+      "Action": ["iam:CreateOpenIDConnectProvider"],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-*",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyAssumeRoleWithWebIdentity",
+      "Effect": "Deny",
+      "Action": ["sts:AssumeRoleWithWebIdentity"],
+      "Resource": ["*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:FederatedProvider": [
+            "arn:aws:iam::*:oidc-provider/oidc.eks.*.amazonaws.com/id/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyCorePolicyChange",
+      "Effect": "Deny",
+      "Action": [
+        "iam:CreatePolicy",
+        "iam:CreatePolicyVersion",
+        "iam:DeletePolicy",
+        "iam:DeletePolicyVersion",
+        "iam:SetDefaultPolicyVersion"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:policy/boundaries*",
+        "arn:aws:iam::*:policy/ecops*",
+        "arn:aws:iam::*:policy/provisioning*"
+      ],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyBoundaryDeletePut",
+      "Effect": "Deny",
+      "Action": [
+        "iam:DeleteRolePermissionsBoundary",
+        "iam:DeleteUserPermissionsBoundary",
+        "iam:PutRolePermissionsBoundary",
+        "iam:PutUserPermissionsBoundary"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-*",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyIAMActionsOnProvisionedRole",
+      "Effect": "Deny",
+      "Action": [
+        "iam:AttachRolePolicy",
+        "iam:CreateRole",
+        "iam:DeleteRole",
+        "iam:DetachRolePolicy",
+        "iam:DeleteRolePermissionsBoundary",
+        "iam:PutRolePermissionsBoundary",
+        "iam:PutRolePolicy",
+        "iam:TagRole",
+        "iam:UntagRole",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:UpdateRole",
+        "iam:UpdateRoleDescription"
+      ],
+      "Resource": [
+        "arn:aws:iam::*:role/PROVISIONING-*",
+        "arn:aws:iam::*:role/Admin",
+        "arn:aws:iam::*:role/NetworkAdmin",
+        "arn:aws:iam::*:role/PowerUser",
+        "arn:aws:iam::*:role/Procurement",
+        "arn:aws:iam::*:role/ReadOnly",
+        "arn:aws:iam::*:role/SecurityReadOnly",
+        "arn:aws:iam::*:role/SecurityAdmin",
+        "arn:aws:iam::*:role/SuperAdmin"
+      ],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::111111111111:role/ADFS-PROVISIONING-Admin"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyYNAPAdminCWE",
+      "Effect": "Deny",
+      "Action": [
+        "events:PutRule",
+        "events:PutTargets",
+        "events:RemoveTargets",
+        "events:DisableRule",
+        "events:DeleteRule"
+      ],
+      "Resource": ["arn:aws:events:*:*:rule/ynap-*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::*:role/PROVISIONING-Network"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "DenyDeleteYNAPAdminCWLGroups",
+      "Effect": "Deny",
+      "Action": ["logs:DeleteLogGroup", "logs:PutRetentionPolicy"],
+      "Resource": ["arn:aws:logs:*:*:log-group:ynap-admin-*"],
+      "Condition": {
+        "StringNotLike": {
+          "aws:PrincipalArn": [
+            "arn:aws:iam::*:role/PROVISIONING-Admin",
+            "arn:aws:iam::*:role/PROVISIONING-Network"
+          ]
+        }
+      }
+    }
+  ]
+}

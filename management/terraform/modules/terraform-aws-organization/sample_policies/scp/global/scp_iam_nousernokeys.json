@@ -1,0 +1,18 @@
+{
+  "Sid": "DenyUser",
+  "Effect": "Deny",
+  "Action": [
+    "iam:AddUserToGroup",
+    "iam:AttachUserPolicy",
+    "iam:CreateUser",
+    "iam:CreateAccessKey",
+    "iam:PutUserPolicy",
+    "iam:UpdateUser"
+  ],
+  "Resource": ["*"],
+  "Condition": {
+    "StringNotLike": {
+      "aws:PrincipalArn": ["arn:aws:iam::*:role/Admin"]
+    }
+  }
+}
